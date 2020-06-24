@@ -8,11 +8,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StateManager.Extensions;
+using StateManager;
 
 namespace StateManagement.Client
 {
     public class Program
     {
+        private  async static Task InitializeState(IServiceProvider services, string errorStateKey)
+        {
+            var state=services.GetRequiredService<TasksStateService>();
+            state.ErrorKey = errorStateKey;
+            if (await state.Load(errorStateKey))
+            {
+                await state.Delete(errorStateKey);
+            }
+
+        }
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -20,7 +31,10 @@ namespace StateManagement.Client
             
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddStateManagemenet();
-            await builder.Build().RunAsync();
+            var built = builder.Build();
+            await InitializeState(built.Services, 
+                "stateSavedBeforeError");
+            await built.RunAsync();
         }
     }
 }

@@ -1,17 +1,32 @@
 ﻿@page "/counter"
 @inherits ComponentBase
+@inject StateManager.TasksStateService tasksStateService
 <h1>Counter</h1>
 
-<p>Current count: @currentCount</p>
+<p>Current count: @currentCount.Counter</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" 
+        @onclick="IncrementCount">
+    Click me
+</button>
+<button class="btn btn-primary" 
+        @onclick="TryException">
+    TryException
+</button>
 
 @code {
-    private int currentCount = 0;
-
+    private CounterStatus currentCount;
+    protected override void OnInitialized()
+    {
+        currentCount = tasksStateService
+            .Get<CounterStatus>("counter", true);
+    }
     private void IncrementCount()
     {
+        currentCount.Counter++;
+    }
+    private void TryException()
+    {
         throw new Exception();
-        currentCount++;
     }
 }
