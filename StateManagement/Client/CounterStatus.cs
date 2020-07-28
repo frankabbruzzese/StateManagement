@@ -9,5 +9,6 @@ namespace StateManagement.Client
     public class CounterStatus
     {
         public int Counter { get; set; } 
+        
     }
 }

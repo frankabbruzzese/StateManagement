@@ -14,10 +14,14 @@ namespace StateManagement.Client
 {
     public class Program
     {
-        private  async static Task InitializeState(IServiceProvider services, string errorStateKey)
+        private  async static Task InitializeState(IServiceProvider services, 
+            string errorStateKey,
+            string exitConfirm)
         {
             var state=services.GetRequiredService<TasksStateService>();
             state.ErrorKey = errorStateKey;
+            state.UnloadKey = errorStateKey;
+            state.UnloadPrompt = exitConfirm;
             if (await state.Load(errorStateKey))
             {
                 await state.Delete(errorStateKey);
@@ -33,7 +37,8 @@ namespace StateManagement.Client
             builder.Services.AddStateManagemenet();
             var built = builder.Build();
             await InitializeState(built.Services, 
-                "stateSavedBeforeError");
+                "stateSaved", "There are unsaved changes. Quit anyway?");
+            await built.Services.EnableUnloadEvents();
             await built.RunAsync();
         }
     }

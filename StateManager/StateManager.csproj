@@ -5,16 +5,16 @@
     <RazorLangVersion>3.0</RazorLangVersion>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.3" />
+    <Content Remove="wwwroot\stateManager.js" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.447" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.3" />
   </ItemGroup>
 
 </Project>

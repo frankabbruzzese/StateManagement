@@ -1,0 +1,15 @@
+[
+    {
+        "outputFileName": "wwwroot/stateManager.min.js",
+        "inputFiles": [
+            "js/stateManager.js"
+        ],
+        "minify": {
+            "enabled": true,
+            "renameLocals": true
+        },
+        "sourceMap": true
+    }
+]
+
+

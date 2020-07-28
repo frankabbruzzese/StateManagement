@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using StateManager.ErrorHandling;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.JSInterop;
+using System.Runtime.CompilerServices;
+using System.IO.IsolatedStorage;
 
 namespace StateManager
 {
@@ -22,11 +24,14 @@ namespace StateManager
         
         IJSRuntime JSRuntime;
         IErrorHandler ErrorHandler;
+        DotNetObjectReference<TasksStateService> jsReference;
+        public DotNetObjectReference<TasksStateService> JsTeference => jsReference;
         public TasksStateService(IJSRuntime jSRuntime,
             IErrorHandler errorHandler)
         {
             JSRuntime = jSRuntime;
             ErrorHandler = errorHandler;
+            jsReference=DotNetObjectReference.Create(this);
             ErrorHandler.OnException += SaveError;
         }
 
@@ -141,7 +146,24 @@ namespace StateManager
             await JSRuntime
                 .InvokeVoidAsync("window.localStorage.removeItem", key);
         }
+        public string UnloadPrompt { get; set; }
+        [JSInvokable]
+        public  string OnBeforeUnload()
+        {
+            if (IsDirty()) return UnloadPrompt;
+            else return string.Empty;
+        }
+        public event Func<Task> BeforeUnload;
+        public string  UnloadKey { get; set; }
+        [JSInvokable]
+        public async  Task OnUnload()
+        {
 
+            if (BeforeUnload != null)
+                await BeforeUnload.Invoke();
+            if (IsDirty())
+                await Save(UnloadKey);
+        }
         public void Dispose()
         {
             ErrorHandler.OnException -= SaveError; ;

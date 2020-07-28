@@ -5,6 +5,9 @@ using System.Text;
 
 namespace StateManager.ErrorHandling
 {
+    /// <summary>
+    /// internal use
+    /// </summary>
     public class ErrorRecoveryLogger : ILogger
     {
         IErrorHandler errorHendler;
@@ -30,7 +33,9 @@ namespace StateManager.ErrorHandling
             errorHendler.Trigger(exception);
         }
     }
-
+    /// <summary>
+    /// internal use
+    /// </summary>
     public class FakeScope : IDisposable
     {
         public void Dispose()

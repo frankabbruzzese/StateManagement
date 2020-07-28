@@ -5,6 +5,9 @@ using System.Text;
 
 namespace StateManager.ErrorHandling
 {
+    /// <summary>
+    /// internal use
+    /// </summary>
     public class ErrorRecoveryLogProvider : ILoggerProvider
     {
         IErrorHandler errorHandler;
